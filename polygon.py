@@ -41,17 +41,17 @@ class Polygon:
         """
 
         summits = self.summits
-        summits.append(summits[0]) # to close the polygon
+        summits.append(summits[0]) # Pour former le polygone
 
-        xs, ys = zip(*summits) #create lists of x and y values
+        xs, ys = zip(*summits) # Convertir les sommets en deux tableaux (xs, ys)
 
         plt.figure()
 
-        # Plot the arcs
+        # Affiche les cordes
         for i, j in self.summitArcs:
             plt.plot([summits[i][0], summits[j][0]], [summits[i][1], summits[j][1]], linestyle='dashed', c='red')
 
-        # Plot the summits
+        # Affiche les sommets
         for i in range(self.n):
             plt.text(summits[i][0], summits[i][1], str(i), fontsize=12, c='blue', fontweight='bold')
         plt.plot(xs, ys, c='black')
