@@ -5,14 +5,14 @@ import matplotlib.pyplot as plt
 
 
 class Polygon:
-    def __init__(self, n, summits = [], summitArcs = []):
+    def __init__(self, n, summits = [], arcs = []):
         """
         Créer un polygone à n sommets. Si des sommets sont donnés, ils sont utilisés. Sinon, ils peuvent être générés avec la méthode generateSummits.
         """
         
         self.n = n
         self.summits = summits
-        self.summitArcs = summitArcs
+        self.arcs = arcs
     
 
     def generateSummits(self, radius):
@@ -48,7 +48,7 @@ class Polygon:
         plt.figure()
 
         # Affiche les cordes
-        for i, j in self.summitArcs:
+        for i, j in self.arcs:
             plt.plot([summits[i][0], summits[j][0]], [summits[i][1], summits[j][1]], linestyle='dashed', c='red')
 
         # Affiche les sommets
@@ -64,8 +64,8 @@ class Polygon:
 if __name__ == "__main__":
     polygon = Polygon(5)
     polygon.generateSummits(1)
-    polygon.summitArcs = [(0, 2)]
+    polygon.arcs = [(0, 2)]
 
     print(polygon.summits)
-    print(polygon.summitArcs)
+    print(polygon.arcs)
     polygon.show()
