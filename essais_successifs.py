@@ -43,6 +43,28 @@ class PolygonEssaisSuccessifs(Polygon):
             
         return True
     
+    def divide(self, i, j):
+        """
+        Divise le polygone en deux sous-polygones.
+
+        Paramètres
+        ----------
+        i : int
+            Numéro du premier sommet de l'arc.
+        j : int
+            Numéro du second sommet de l'arc.
+
+        Retourne
+        --------
+        Polygon, Polygon
+            Sous-polygones gauche et droite.
+        """
+        
+        gauche = self.summits[i:j+1]
+        droite = self.summits[j:] + self.summits[:i+1]
+
+        return PolygonEssaisSuccessifs(len(gauche), gauche, [(k, l) for k, l in self.arcs if k in gauche and l in gauche]), PolygonEssaisSuccessifs(len(droite), droite, [(k, l) for k, l in self.arcs if k in droite and l in droite])
+    
     def doIntersect(self, p1, q1, p2, q2):
         """
         Vérifie si les segments [p1, q1] et [p2, q2] s'intersectent.
@@ -81,12 +103,60 @@ class PolygonEssaisSuccessifs(Polygon):
         
         return False
     
+def triangulation(polygon, polygonAllArcs, polygonSummits):
+    """
+    Triangule le polygone.
+
+    Paramètres
+    ----------
+    polygon : Polygon
+        Polygone à trianguler
+
+    polygonAllArcs : list
+        Liste des tous les arcs possibles
+
+    polygonSummits : list
+        Liste des sommets du polygone à trianguler
+
+    Retourne
+    --------
+    list
+        Liste des arcs qui composent la triangulation
+    """
+
+    # Vérifie si le polygone est déjà triangulé
+    if len(polygon.summits) == 3:
+        return [
+            (polygonSummits.index(polygon.summits[0]), polygonSummits.index(polygon.summits[1])),
+            (polygonSummits.index(polygon.summits[1]), polygonSummits.index(polygon.summits[2])),
+            (polygonSummits.index(polygon.summits[2]), polygonSummits.index(polygon.summits[0]))
+        ]
+    
+    # Explorer toutes les cordes possibles
+    for i, j in polygonAllArcs:
+        if polygon.arcIsValid(i, j):
+            # Tracer la corde
+            polygon.arcs.append((i, j))
+            
+            # Diviser le polygone en deux sous-polygones
+            left, right = polygon.divide(i, j)
+            
+            # Répéter le processus sur les sous-polygones
+            leftArcs = triangulation(left, polygonAllArcs, polygonSummits)
+            rightArcs = triangulation(right, polygonAllArcs, polygonSummits)
+            
+            # Retourner la triangulation complète
+            return leftArcs + rightArcs
+    
+    # Si aucune corde n'est valide, le polygone est déjà triangulé
+    return polygon.arcs
+
 
 if __name__ == "__main__":
-    polygon = PolygonEssaisSuccessifs(5)
+    polygon = PolygonEssaisSuccessifs(7)
     polygon.generateSummits(1)
-    polygon.arcs = [(0, 2)]
-
-    print(polygon.arcIsValid(3, 0))
-    polygon.arcs.append((3, 0))
+    polygon.show()
+    
+    polygon.arcs = triangulation(polygon, polygon.getAllArcs(), polygon.summits)
+    print(polygon.arcs)
     polygon.show()

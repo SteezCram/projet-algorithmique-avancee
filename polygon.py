@@ -10,6 +10,29 @@ class Polygon:
         self.summits = summits
         self.arcs = arcs
     
+    def getAllArcs(self):
+        """
+        Retourne tous les arcs possibles du polygone.
+        """
+        
+        arcs = []
+        
+        for i in range(self.n):
+            for j in range(i + 2, self.n):
+                arcs.append((i, j))
+
+        return arcs
+    
+    def getSummitIndex(polygon, summit):
+        """
+        Retourne l'index du sommet summit dans le polygone polygon.
+        """
+        
+        for i in range(len(polygon.summits)):
+            if polygon.summits[i] == summit:
+                return i
+        
+        return -1
 
     def generateSummits(self, radius):
         """
