@@ -125,14 +125,14 @@ def triangulation(polygon, polygonAllArcs, polygonSummits):
     """
 
     # Vérifie si le polygone est déjà triangulé
-    if len(polygon.summits) == 3:
+    if polygon.n == 3:
         return [
             (polygonSummits.index(polygon.summits[0]), polygonSummits.index(polygon.summits[1])),
             (polygonSummits.index(polygon.summits[1]), polygonSummits.index(polygon.summits[2])),
             (polygonSummits.index(polygon.summits[2]), polygonSummits.index(polygon.summits[0]))
         ]
     
-    # Explorer toutes les cordes possibles
+    # Explore toutes les cordes possibles
     for i, j in polygonAllArcs:
         if polygon.arcIsValid(i, j):
             # Tracer la corde
