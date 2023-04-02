@@ -1,15 +1,11 @@
 import math
 import matplotlib.pyplot as plt
 
-
-
-
 class Polygon:
     def __init__(self, n, summits = [], arcs = []):
         """
         Créer un polygone à n sommets. Si des sommets sont donnés, ils sont utilisés. Sinon, ils peuvent être générés avec la méthode generateSummits.
         """
-        
         self.n = n
         self.summits = summits
         self.arcs = arcs
@@ -57,8 +53,6 @@ class Polygon:
         plt.plot(xs, ys, c='black')
 
         plt.show()
-
-
 
 
 if __name__ == "__main__":
