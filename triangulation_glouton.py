@@ -15,6 +15,7 @@ def aire(p1,p2,p3):
 
 def triangulation_glouton(poly):
     triangles = []
+
     while len(poly.getAllArcs()) > 3: #tant que le polygone n'est pas un triangle
         min = None
         minI = None
@@ -50,4 +51,5 @@ if __name__ == "__main__":
     
     print(triangulation_glouton(polygon))
     polygon.show()
+
 

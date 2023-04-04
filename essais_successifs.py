@@ -1,6 +1,23 @@
 from polygon import Polygon
 
 class PolygonEssaisSuccessifs(Polygon):
+    def __init__(self, n, summits = [], arcs = []):
+        """
+        Créer un polygone à n sommets. Si des sommets sont donnés, ils sont utilisés. Sinon, ils peuvent être générés avec la méthode generateSummits.
+
+        Paramètres
+        ----------
+        n : int
+            Nombre de sommets du polygone.
+        summits : list
+            Liste des sommets du polygone.
+        arcs : list
+            Liste des arcs du polygone.
+        """
+
+        super().__init__(n, summits, arcs)
+        self.arcsMax = (self.n * (self.n - 3)) // 2
+
     def arcIsValid(self, i, j):
         """
         Vérifie si l'arc (i, j) est valide. 3 vérifications sont effectuées :
@@ -103,7 +120,7 @@ class PolygonEssaisSuccessifs(Polygon):
         
         return False
     
-def triangulation(polygon, polygonAllArcs, polygonSummits):
+def triangulation(polygon, polygonAllArcs, polygonArcsCount = 0, summitIndex = 0):
     """
     Triangule le polygone.
 
@@ -124,39 +141,30 @@ def triangulation(polygon, polygonAllArcs, polygonSummits):
         Liste des arcs qui composent la triangulation
     """
 
-    # Vérifie si le polygone est déjà triangulé
-    if polygon.n == 3:
-        return [
-            (polygonSummits.index(polygon.summits[0]), polygonSummits.index(polygon.summits[1])),
-            (polygonSummits.index(polygon.summits[1]), polygonSummits.index(polygon.summits[2])),
-            (polygonSummits.index(polygon.summits[2]), polygonSummits.index(polygon.summits[0]))
-        ]
-    
-    # Explore toutes les cordes possibles
-    for i, j in polygonAllArcs:
-        if polygon.arcIsValid(i, j):
-            # Tracer la corde
-            polygon.arcs.append((i, j))
-            
-            # Diviser le polygone en deux sous-polygones
-            left, right = polygon.divide(i, j)
-            
-            # Répéter le processus sur les sous-polygones
-            leftArcs = triangulation(left, polygonAllArcs, polygonSummits)
-            rightArcs = triangulation(right, polygonAllArcs, polygonSummits)
-            
-            # Retourner la triangulation complète
-            return leftArcs + rightArcs
-    
-    # Si aucune corde n'est valide, le polygone est déjà triangulé
+    # Tant qu'on a pas tracé tous les arcs
+    if summitIndex < polygon.arcsMax:
+        triangulation(polygon, polygonAllArcs, polygonArcsCount, summitIndex + 1)
+
+    if polygon.arcIsValid(polygonAllArcs[summitIndex][0], polygonAllArcs[summitIndex][1]):
+        # On ajoute l'arc à la triangulation
+        polygon.arcs.append(polygonAllArcs[summitIndex])
+
+        if polygonArcsCount == polygon.n - 3:
+            # On retourne les arcs de la triangulation
+            return polygon.arcs
+        
+        if summitIndex < polygon.arcsMax:
+            # On a tracé une corde qui forme le polygone
+            triangulation(polygon, polygonAllArcs, len(polygon.arcs) + 1, summitIndex + 1)
+
     return polygon.arcs
 
 
 if __name__ == "__main__":
-    polygon = PolygonEssaisSuccessifs(7)
+    polygon = PolygonEssaisSuccessifs(6)
     polygon.generateSummits(1)
     polygon.show()
     
-    polygon.arcs = triangulation(polygon, polygon.getAllArcs(), polygon.summits)
+    polygon.arcs = triangulation(polygon, polygon.getAllArcs())
     print(polygon.arcs)
     polygon.show()
