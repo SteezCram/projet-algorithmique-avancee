@@ -141,23 +141,27 @@ def triangulation(polygon, polygonAllArcs, polygonArcsCount = 0, summitIndex = 0
         Liste des arcs qui composent la triangulation
     """
 
-    if summitIndex < polygon.arcsMax - polygonArcsCount:
+    # Tant qu'on a pas tracé tous les arcs
+    if summitIndex < polygon.arcsMax:
         triangulation(polygon, polygonAllArcs, polygonArcsCount, summitIndex + 1)
 
     if polygon.arcIsValid(polygonAllArcs[summitIndex][0], polygonAllArcs[summitIndex][1]):
+        # On ajoute l'arc à la triangulation
         polygon.arcs.append(polygonAllArcs[summitIndex])
 
         if polygonArcsCount == polygon.n - 3:
+            # On retourne les arcs de la triangulation
             return polygon.arcs
         
-        if summitIndex < polygon.arcsMax - polygonArcsCount:
+        if summitIndex < polygon.arcsMax:
+            # On a tracé une corde qui forme le polygone
             triangulation(polygon, polygonAllArcs, len(polygon.arcs) + 1, summitIndex + 1)
 
     return polygon.arcs
 
 
 if __name__ == "__main__":
-    polygon = PolygonEssaisSuccessifs(8)
+    polygon = PolygonEssaisSuccessifs(6)
     polygon.generateSummits(1)
     polygon.show()
     
