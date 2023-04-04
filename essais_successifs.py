@@ -28,7 +28,7 @@ class PolygonEssaisSuccessifs(Polygon):
         if (i - 1) % self.n == j or (j - 1) % self.n == i:
             return False
 
-        # Vériifie que l'arc n'est pas un arc existant
+        # Vérifie que l'arc n'est pas un arc existant
         if (i, j) in self.arcs or (j, i) in self.arcs:
             return False
         
