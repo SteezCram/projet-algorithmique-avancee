@@ -1,3 +1,4 @@
+from math import sqrt
 from polygon import Polygon
 
 def distance(p1,p2):
@@ -19,11 +20,12 @@ def triangulation_glouton(poly):
     while len(poly.getAllArcs()) > 3: #tant que le polygone n'est pas un triangle
         min = None
         minI = None
+        m = len(poly.summits)
 
-        for i in range(len(poly.getAllArcs() - 2)):
+        for i in range(m-2):
             first = poly.summits[i]
-            second = poly.summits[(i+1) % len(poly.getAllArcs())]
-            third = poly.summits[(i+2) % len(poly.getAllArcs())]
+            second = poly.summits[(i+1) % (m-2)]
+            third = poly.summits[(i+2) % (m-2)]
 
             length = distance(first,third) / (2 * aire(first,second,third))
 
@@ -32,13 +34,13 @@ def triangulation_glouton(poly):
                 minI = i
 
         # ajoute le nouveau triangle au array
-        triangles.append((poly[minI], poly[minI+1], poly[minI+2]))
+        triangles.append((poly.summits[minI], poly.summits[minI+1], poly.summits[minI+2]))
         
         # met à jour le polygone à trianguler
-        if len(poly[:minI+1] + [poly[minI+2]]) == 3:
-            poly = poly[:minI+1] + [poly[minI+2]]
+        if len(poly.summits[:minI+1] + [poly.summits[minI+2]]) == 3:
+            poly.summits = poly.summits[:minI+1] + [poly.summits[minI+2]]
         else:
-            poly = [poly[minI]] + poly[minI+2:]
+            poly.summits = [poly.summits[minI]] + poly.summits[minI+2:]
 
     triangles.append(tuple(poly))
     
