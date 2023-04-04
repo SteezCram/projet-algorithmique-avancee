@@ -49,7 +49,7 @@ if __name__ == "__main__":
     polygon.generateSummits(1)
     polygon.show()
     
-    print(triangulation_glouton(polygon))
+    print(triangulation(polygon))
     polygon.show()
 
 
