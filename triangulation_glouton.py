@@ -19,7 +19,7 @@ def triangulation_glouton(poly):
         min = None
         minI = None
 
-        for i in range(len(poly.getAllArcs())):
+        for i in range(len(poly.getAllArcs() - 2)):
             first = poly.summits[i]
             second = poly.summits[(i+1) % len(poly.getAllArcs())]
             third = poly.summits[(i+2) % len(poly.getAllArcs())]
