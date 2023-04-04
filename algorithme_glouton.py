@@ -49,7 +49,6 @@ if __name__ == "__main__":
     polygon.generateSummits(1)
     polygon.show()
     
-    print(triangulation(polygon))
+    polygon.arcs = triangulation(polygon)
+    print(polygon.arcs)
     polygon.show()
-
-
