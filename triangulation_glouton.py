@@ -43,3 +43,11 @@ def triangulation_glouton(poly):
     
     return triangles
 
+if __name__ == "__main__":
+    polygon = Polygon(7)
+    polygon.generateSummits(1)
+    polygon.show()
+    
+    print(triangulation_glouton(polygon))
+    polygon.show()
+
