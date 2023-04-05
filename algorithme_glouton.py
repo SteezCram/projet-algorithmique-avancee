@@ -15,17 +15,17 @@ def aire(p1,p2,p3):
     return abs((p2[0]-p1[0])*(p3[1]-p1[1]) - (p3[0]-p1[0])*(p2[1]-p1[1])) / 2
 
 def triangulation(poly):
-    triangles = []
-
-    while len(poly.getAllArcs()) > 3: #tant que le polygone n'est pas un triangle
+    copyPoly = poly
+    
+    while len(copyPoly.getAllArcs()) > 3: #tant que le polygone n'est pas un triangle
         min = None
         minI = None
-        m = len(poly.summits)
+        m = len(copyPoly.summits)
 
         for i in range(m-2):
-            first = poly.summits[i]
-            second = poly.summits[(i+1) % (m-2)]
-            third = poly.summits[(i+2) % (m-2)]
+            first = copyPoly.summits[i]
+            second = copyPoly.summits[(i+1) % (m-2)]
+            third = copyPoly.summits[(i+2) % (m-2)]
 
             length = distance(first,third) / (2 * aire(first,second,third))
 
@@ -33,18 +33,22 @@ def triangulation(poly):
                 min = length
                 minI = i
 
-        # ajoute le nouveau triangle au array
-        triangles.append((poly.summits[minI], poly.summits[minI+1], poly.summits[minI+2]))
+        if (copyPoly.summits[minI], copyPoly.summits[minI+1]) not in poly.getAllArcs():
+            poly.arcs.append((copyPoly.summits[minI], copyPoly.summits[minI+1]))
+        
+        if (copyPoly.summits[minI+1], copyPoly.summits[minI+2]) not in poly.getAllArcs():
+            poly.arcs.append((copyPoly.summits[minI+1], copyPoly.summits[minI+2]))
+
+        if (copyPoly.summits[minI], copyPoly.summits[minI+2]) not in poly.getAllArcs():
+            poly.arcs.append((copyPoly.summits[minI], copyPoly.summits[minI+2]))
         
         # met à jour le polygone à trianguler
-        if len(poly.summits[:minI+1] + [poly.summits[minI+2]]) == 3:
-            poly.summits = poly.summits[:minI+1] + [poly.summits[minI+2]]
+        if len(copyPoly.summits[:minI+1] + [copyPoly.summits[minI+2]]) == 3:
+            copyPoly.summits = copyPoly.summits[:minI+1] + [copyPoly.summits[minI+2]]
         else:
-            poly.summits = [poly.summits[minI]] + poly.summits[minI+2:]
-
-    triangles.append(tuple(poly))
+            copyPoly.summits = [copyPoly.summits[minI]] + copyPoly.summits[minI+2:]
     
-    return triangles
+    return poly.arcs
 
 if __name__ == "__main__":
     polygon = Polygon(7)
