@@ -8,53 +8,104 @@ def distance(p1,p2):
     """
     return ((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)**0.5
 
-def aire(p1,p2,p3):
+def doIntersect(p1, q1, p2, q2):
     """
-    Calcul de l'aire d'un triangle
+    Vérifie si les segments [p1, q1] et [p2, q2] s'intersectent.
+
+    Paramètres
+    ----------
+    p1 : tuple
+        Premier sommet du premier segment.
+    q1 : tuple
+        Second sommet du premier segment.
+    p2 : tuple
+        Premier sommet du second segment.
+    q2 : tuple  
+        Second sommet du second segment.
+    
+    Retourne
+    --------
+    bool
+        True si les segments s'intersectent, False sinon.
+
+    Remarque
+    --------
+    Origine : https://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
     """
-    return abs((p2[0]-p1[0])*(p3[1]-p1[1]) - (p3[0]-p1[0])*(p2[1]-p1[1])) / 2
+    s1_x = q1[0] - p1[0]
+    s1_y = q1[1] - p1[1]
+    s2_x = q2[0] - p2[0]
+    s2_y = q2[1] - p2[1]
+
+    if (-s2_x * s1_y + s1_x * s2_y) != 0 and (-s2_x * s1_y + s1_x * s2_y) != 0:
+        s = (-s1_y * (p1[0] - p2[0]) + s1_x * (p1[1] - p2[1])) / (-s2_x * s1_y + s1_x * s2_y)
+        t = ( s2_x * (p1[1] - p2[1]) - s2_y * (p1[0] - p2[0])) / (-s2_x * s1_y + s1_x * s2_y)
+
+        if s >= 0 and s <= 1 and t >= 0 and t <= 1:
+            return True
+    
+    return False
+
+def arcIsValid(poly, i, j):
+    """
+    Vérifie si l'arc (i, j) est valide. 3 vérifications sont effectuées :
+    1. L'arc ne doit pas être un segment qui compose la figure.
+    1. L'arc ne doit pas être un arc existant.
+    3. L'arc ne doit pas intersecter un autre arc.
+    Paramètres
+    ----------
+    i : int
+        Numéro du premier sommet de l'arc.
+    j : int
+        Numéro du second sommet de l'arc.
+    Retourne
+    --------
+    bool
+        True si l'arc est valide, False sinon.
+    """
+    if i == j:
+        return False
+    
+    # Vérifie que l'arc n'est pas un segment qui compose la figure
+    if (i - 1) % poly.n == j or (j - 1) % poly.n == i:
+        return False
+    # Vérifie que l'arc n'est pas un arc existant
+    if (i, j) in poly.arcs or (j, i) in poly.arcs:
+        return False
+    
+    # Vérifie que l'arc ne coupe pas un autre arc
+    for k, l in poly.arcs:
+        # Si un des sommets de l'arc est un sommet de l'arc existant, on passe à l'arc suivant
+        if i == k or j == k or i == l or j == l:
+            continue
+        if doIntersect(poly.summits[i], poly.summits[j], poly.summits[k], poly.summits[l]):
+            return False
+        
+    return True
 
 def triangulation(poly):
-    copyPoly = poly
-    
-    while len(copyPoly.getAllArcs()) > 3: #tant que le polygone n'est pas un triangle
-        min = None
-        minI = None
-        m = len(copyPoly.summits)
+    allArcs = poly.getAllArcs()
 
-        for i in range(m-2):
-            first = copyPoly.summits[i]
-            second = copyPoly.summits[(i+1) % (m-2)]
-            third = copyPoly.summits[(i+2) % (m-2)]
-
-            length = distance(first,third) / (2 * aire(first,second,third))
-
-            if min == None or length < min:
-                min = length
-                minI = i
-
-        if (copyPoly.summits[minI], copyPoly.summits[minI+1]) not in poly.getAllArcs():
-            poly.arcs.append((copyPoly.summits[minI], copyPoly.summits[minI+1]))
+    while len(allArcs) > 0:
+        shortest = None
+        for arc in allArcs:
+            if arcIsValid(poly,arc[0],arc[1]):
+                if shortest is None or distance(poly.summits[arc[0]],poly.summits[arc[1]]) < distance(poly.summits[shortest[0]],poly.summits[shortest[1]]):
+                    shortest = arc
         
-        if (copyPoly.summits[minI+1], copyPoly.summits[minI+2]) not in poly.getAllArcs():
-            poly.arcs.append((copyPoly.summits[minI+1], copyPoly.summits[minI+2]))
+        if shortest == None:
+            break
 
-        if (copyPoly.summits[minI], copyPoly.summits[minI+2]) not in poly.getAllArcs():
-            poly.arcs.append((copyPoly.summits[minI], copyPoly.summits[minI+2]))
-        
-        # met à jour le polygone à trianguler
-        if len(copyPoly.summits[:minI+1] + [copyPoly.summits[minI+2]]) == 3:
-            copyPoly.summits = copyPoly.summits[:minI+1] + [copyPoly.summits[minI+2]]
-        else:
-            copyPoly.summits = [copyPoly.summits[minI]] + copyPoly.summits[minI+2:]
+        poly.arcs.append(shortest)
     
     return poly.arcs
 
+
 if __name__ == "__main__":
-    polygon = Polygon(7)
+    polygon = Polygon(6)
     polygon.generateSummits(1)
     polygon.show()
-    
+
     polygon.arcs = triangulation(polygon)
     print(polygon.arcs)
     polygon.show()
