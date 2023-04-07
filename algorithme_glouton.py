@@ -103,10 +103,11 @@ def triangulation(polygon):
     """
 
     allArcs = polygon.getAllArcs()
+    allArcsLen = len(allArcs)
 
-    while len(allArcs) > 0:
+    while allArcsLen > 0:
         shortest = None
-        
+
         for arc in allArcs:
             if polygon.arcIsValid(arc[0], arc[1]):
                 if shortest is None or polygon.distance(polygon.summits[arc[0]], polygon.summits[arc[1]]) < polygon.distance(polygon.summits[shortest[0]], polygon.summits[shortest[1]]):
