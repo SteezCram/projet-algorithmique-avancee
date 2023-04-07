@@ -88,10 +88,25 @@ class PolygonGlouton(Polygon):
         return True
 
 def triangulation(polygon):
+    """
+    Triangule un polygone en utilisant l'algorithme glouton.
+
+    Paramètres
+    ----------
+    polygon : PolygonGlouton
+        Polygone à trianguler.
+
+    Retourne
+    --------
+    list
+        Liste des arcs de la triangulation.
+    """
+
     allArcs = polygon.getAllArcs()
 
     while len(allArcs) > 0:
         shortest = None
+        
         for arc in allArcs:
             if polygon.arcIsValid(arc[0], arc[1]):
                 if shortest is None or polygon.distance(polygon.summits[arc[0]], polygon.summits[arc[1]]) < polygon.distance(polygon.summits[shortest[0]], polygon.summits[shortest[1]]):
