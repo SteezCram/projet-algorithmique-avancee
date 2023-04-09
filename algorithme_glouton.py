@@ -102,7 +102,7 @@ def triangulation(poly):
 
 
 if __name__ == "__main__":
-    polygon = Polygon(6)
+    polygon = Polygon(9)
     polygon.generateSummits(1)
     polygon.show()
 

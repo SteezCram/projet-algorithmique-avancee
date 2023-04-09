@@ -1,0 +1,120 @@
+from polygon import Polygon
+
+def distance(p1,p2):
+    """
+    Distance euclidienne entre deux points
+    Source : https://fr.wikipedia.org/wiki/Distance_entre_deux_points_sur_le_plan_cart%C3%A9sien
+    """
+    return ((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)**0.5
+
+def doIntersect(p1, q1, p2, q2):
+    """
+    Vérifie si les segments [p1, q1] et [p2, q2] s'intersectent.
+
+    Paramètres
+    ----------
+    p1 : tuple
+        Premier sommet du premier segment.
+    q1 : tuple
+        Second sommet du premier segment.
+    p2 : tuple
+        Premier sommet du second segment.
+    q2 : tuple  
+        Second sommet du second segment.
+    
+    Retourne
+    --------
+    bool
+        True si les segments s'intersectent, False sinon.
+
+    Remarque
+    --------
+    Origine : https://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
+    """
+    s1_x = q1[0] - p1[0]
+    s1_y = q1[1] - p1[1]
+    s2_x = q2[0] - p2[0]
+    s2_y = q2[1] - p2[1]
+
+    if (-s2_x * s1_y + s1_x * s2_y) != 0 and (-s2_x * s1_y + s1_x * s2_y) != 0:
+        s = (-s1_y * (p1[0] - p2[0]) + s1_x * (p1[1] - p2[1])) / (-s2_x * s1_y + s1_x * s2_y)
+        t = ( s2_x * (p1[1] - p2[1]) - s2_y * (p1[0] - p2[0])) / (-s2_x * s1_y + s1_x * s2_y)
+
+        if s >= 0 and s <= 1 and t >= 0 and t <= 1:
+            return True
+    
+    return False
+
+def arcIsValid(poly, i, j):
+    """
+    Vérifie si l'arc (i, j) est valide. 3 vérifications sont effectuées :
+    1. L'arc ne doit pas être un segment qui compose la figure.
+    1. L'arc ne doit pas être un arc existant.
+    3. L'arc ne doit pas intersecter un autre arc.
+    Paramètres
+    ----------
+    i : int
+        Numéro du premier sommet de l'arc.
+    j : int
+        Numéro du second sommet de l'arc.
+    Retourne
+    --------
+    bool
+        True si l'arc est valide, False sinon.
+    """
+    if i == j:
+        return False
+    
+    # Vérifie que l'arc n'est pas un segment qui compose la figure
+    if (i - 1) % poly.n == j or (j - 1) % poly.n == i:
+        return False
+    # Vérifie que l'arc n'est pas un arc existant
+    if (i, j) in poly.arcs or (j, i) in poly.arcs:
+        return False
+    
+    # Vérifie que l'arc ne coupe pas un autre arc
+    for k, l in poly.arcs:
+        # Si un des sommets de l'arc est un sommet de l'arc existant, on passe à l'arc suivant
+        if i == k or j == k or i == l or j == l:
+            continue
+        if doIntersect(poly.summits[i], poly.summits[j], poly.summits[k], poly.summits[l]):
+            return False
+        
+    return True
+
+def triangulation_dynamique(poly):
+     
+    arcLength = [[-1 for j in range(poly.n)] for i in range(poly.n)]
+    
+    for arc in poly.getAllArcs():
+        i,j = arc
+        arcLength[i][j] = distance(poly.summits[i],poly.summits[j])
+        arcLength[j][i] = arcLength[i][j]
+    
+    T = [[0 for j in range(poly.n)] for i in range(poly.n)]
+    for i in range(4, poly.n+1):
+       for j in range(poly.n):
+            for k in range(1, i-1):
+               opti = float('inf')
+               min = arcLength[j][(j+k) % poly.n] + arcLength[(j+k) % poly.n][(j+i-1) % poly.n] + T[j][k+1] + T[(j+k) % poly.n][i-k]
+               if min < opti:
+                   opti = min 
+                   T[j][i-1] = k
+        
+       for j in range(poly.n):
+            k = T[j][i-1]
+            t = (j+k) % poly.n
+            if arcIsValid(poly,j,t):
+                poly.arcs.append((j,t))
+
+    
+    return poly.arcs
+    
+if __name__ == "__main__":
+    polygon = Polygon(6)
+    polygon.generateSummits(1)
+    polygon.show()
+
+    polygon.arcs = triangulation_dynamique(polygon)
+    print(polygon.arcs)
+    polygon.show()
