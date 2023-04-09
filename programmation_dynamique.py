@@ -85,9 +85,24 @@ class PolygonProgrammationDynamique(Polygon):
         return True
 
 def triangulation_dynamique(polygon):
+    """
+    Triangule un polygone en utilisant la programmation dynamique.
+
+    Paramètres
+    ----------
+    polygon : PolygonProgrammationDynamique
+        Polygone à trianguler.
+
+    Retourne
+    --------
+    list
+        Liste des arcs du polygone triangulé.
+    """
+
     arcLength = [[-1 for j in range(polygon.n)] for i in range(polygon.n)]
+    allArcs = polygon.getAllArcs()
     
-    for arc in polygon.getAllArcs():
+    for arc in allArcs:
         i,j = arc
         arcLength[i][j] = polygon.distance(polygon.summits[i], polygon.summits[j])
         arcLength[j][i] = arcLength[i][j]

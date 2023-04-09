@@ -89,7 +89,7 @@ class PolygonGlouton(Polygon):
 
 def triangulation(polygon):
     """
-    Triangule un polygone en utilisant l'algorithme glouton.
+    Triangule un polygone en utilisant un algorithme glouton.
 
     Paramètres
     ----------
