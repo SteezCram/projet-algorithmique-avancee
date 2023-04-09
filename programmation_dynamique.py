@@ -120,7 +120,7 @@ def triangulation_dynamique(polygon):
                    T[j][i - 1] = k
         
        for j in range(polygon.n):
-            k = T[j][i-1]
+            k = T[j][i - 1]
             t = (j + k) % polygon.n
 
             if polygon.arcIsValid(j, t):
