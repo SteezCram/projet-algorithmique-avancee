@@ -130,7 +130,7 @@ def triangulation_dynamique(polygon):
     return polygon.arcs
     
 if __name__ == "__main__":
-    polygon = PolygonProgrammationDynamique(8)
+    polygon = PolygonProgrammationDynamique(11)
     polygon.generateSummits(1)
     polygon.show()
 

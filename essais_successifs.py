@@ -112,11 +112,12 @@ class PolygonEssaisSuccessifs(Polygon):
         s2_x = q2[0] - p2[0]
         s2_y = q2[1] - p2[1]
 
-        s = (-s1_y * (p1[0] - p2[0]) + s1_x * (p1[1] - p2[1])) / (-s2_x * s1_y + s1_x * s2_y)
-        t = ( s2_x * (p1[1] - p2[1]) - s2_y * (p1[0] - p2[0])) / (-s2_x * s1_y + s1_x * s2_y)
+        if (-s2_x * s1_y + s1_x * s2_y) != 0 and (-s2_x * s1_y + s1_x * s2_y) != 0:
+            s = (-s1_y * (p1[0] - p2[0]) + s1_x * (p1[1] - p2[1])) / (-s2_x * s1_y + s1_x * s2_y)
+            t = ( s2_x * (p1[1] - p2[1]) - s2_y * (p1[0] - p2[0])) / (-s2_x * s1_y + s1_x * s2_y)
 
-        if s >= 0 and s <= 1 and t >= 0 and t <= 1:
-            return True
+            if s >= 0 and s <= 1 and t >= 0 and t <= 1:
+                return True
         
         return False
     
@@ -164,7 +165,7 @@ def triangulation_essais_successifs(polygon, polygonAllArcs, polygonArcsCount = 
 
 
 if __name__ == "__main__":
-    polygon = PolygonEssaisSuccessifs(6)
+    polygon = PolygonEssaisSuccessifs(11)
     polygon.generateSummits(1)
     polygon.show()
     

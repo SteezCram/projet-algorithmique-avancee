@@ -122,7 +122,7 @@ def triangulation_glouton(polygon):
 
 
 if __name__ == "__main__":
-    polygon = PolygonGlouton(6)
+    polygon = PolygonGlouton(11)
     polygon.generateSummits(1)
     polygon.show()
 
