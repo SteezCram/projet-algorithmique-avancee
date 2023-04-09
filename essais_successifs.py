@@ -122,15 +122,18 @@ class PolygonEssaisSuccessifs(Polygon):
     
 def triangulation(polygon, polygonAllArcs, polygonArcsCount = 0, summitIndex = 0):
     """
-    Triangule le polygone.
+    Triangule le polygone en utilisant la méthode des essais successifs.
 
     Paramètres
     ----------
-    polygon : Polygon
+    polygon : PolygonEssaisSuccessifs
         Polygone à trianguler
 
     polygonAllArcs : list
         Liste des tous les arcs possibles
+
+    polygonArcsCount : int
+        Nombre d'arcs déjà tracés
 
     polygonSummits : list
         Liste des sommets du polygone à trianguler
