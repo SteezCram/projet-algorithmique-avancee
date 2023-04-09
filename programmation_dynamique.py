@@ -2,7 +2,7 @@ from math import sqrt
 from polygon import Polygon
 
 class PolygonProgrammationDynamique(Polygon):
-    def distance(self, p1,p2):
+    def distance(self, p1, p2):
         """
         Distance euclidienne entre deux points
         Source : https://fr.wikipedia.org/wiki/Distance_entre_deux_points_sur_le_plan_cart%C3%A9sien
