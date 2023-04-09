@@ -8,7 +8,7 @@ class PolygonGlouton(Polygon):
         Source : https://fr.wikipedia.org/wiki/Distance_entre_deux_points_sur_le_plan_cart%C3%A9sien
         """
 
-        return ((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)**0.5
+        return sqrt(((p1[0] - p2[0]) ** 2 + (p1[1]-p2[1]) ** 2))
 
     def doIntersect(self, p1, q1, p2, q2):
         """
