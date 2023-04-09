@@ -38,7 +38,7 @@ class PolygonProgrammationDynamique(Polygon):
         s2_x = q2[0] - p2[0]
         s2_y = q2[1] - p2[1]
 
-        if (-s2_x * s1_y + s1_x * s2_y) != 0 and (-s2_x * s1_y + s1_x * s2_y) != 0:
+        if (-s2_x * s1_y + s1_x * s2_y) != 0:
             s = (-s1_y * (p1[0] - p2[0]) + s1_x * (p1[1] - p2[1])) / (-s2_x * s1_y + s1_x * s2_y)
             t = ( s2_x * (p1[1] - p2[1]) - s2_y * (p1[0] - p2[0])) / (-s2_x * s1_y + s1_x * s2_y)
 
