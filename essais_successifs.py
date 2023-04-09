@@ -120,7 +120,7 @@ class PolygonEssaisSuccessifs(Polygon):
         
         return False
     
-def triangulation(polygon, polygonAllArcs, polygonArcsCount = 0, summitIndex = 0):
+def triangulation_essais_successifs(polygon, polygonAllArcs, polygonArcsCount = 0, summitIndex = 0):
     """
     Triangule le polygone en utilisant la méthode des essais successifs.
 
@@ -146,7 +146,7 @@ def triangulation(polygon, polygonAllArcs, polygonArcsCount = 0, summitIndex = 0
 
     # Tant qu'on a pas tracé tous les arcs
     if summitIndex < polygon.arcsMax:
-        triangulation(polygon, polygonAllArcs, polygonArcsCount, summitIndex + 1)
+        triangulation_essais_successifs(polygon, polygonAllArcs, polygonArcsCount, summitIndex + 1)
 
     if polygon.arcIsValid(polygonAllArcs[summitIndex][0], polygonAllArcs[summitIndex][1]):
         # On ajoute l'arc à la triangulation
@@ -158,7 +158,7 @@ def triangulation(polygon, polygonAllArcs, polygonArcsCount = 0, summitIndex = 0
         
         if summitIndex < polygon.arcsMax:
             # On a tracé une corde qui forme le polygone
-            triangulation(polygon, polygonAllArcs, len(polygon.arcs) + 1, summitIndex + 1)
+            triangulation_essais_successifs(polygon, polygonAllArcs, len(polygon.arcs) + 1, summitIndex + 1)
 
     return polygon.arcs
 
@@ -168,6 +168,6 @@ if __name__ == "__main__":
     polygon.generateSummits(1)
     polygon.show()
     
-    polygon.arcs = triangulation(polygon, polygon.getAllArcs())
+    polygon.arcs = triangulation_essais_successifs(polygon, polygon.getAllArcs())
     print(polygon.arcs)
     polygon.show()

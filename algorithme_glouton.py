@@ -87,7 +87,7 @@ class PolygonGlouton(Polygon):
             
         return True
 
-def triangulation(polygon):
+def triangulation_glouton(polygon):
     """
     Triangule un polygone en utilisant un algorithme glouton.
 
@@ -126,6 +126,6 @@ if __name__ == "__main__":
     polygon.generateSummits(1)
     polygon.show()
 
-    polygon.arcs = triangulation(polygon)
+    polygon.arcs = triangulation_glouton(polygon)
     print(polygon.arcs)
     polygon.show()
