@@ -122,10 +122,14 @@ def triangulation_glouton(polygon):
 
 
 if __name__ == "__main__":
-    polygon = PolygonGlouton(11)
+    polygon = PolygonGlouton(6)
     polygon.generateSummits(1)
     polygon.show()
 
     polygon.arcs = triangulation_glouton(polygon)
     print(polygon.arcs)
+    distanceTotal = 0 
+    for a in polygon.arcs:
+        distanceTotal = distanceTotal + polygon.distance(polygon.summits[a[0]],polygon.summits[a[1]])
+    print("Distance totale de triangulation : ",distanceTotal)
     polygon.show()

@@ -1,4 +1,5 @@
 from polygon import Polygon
+from math import sqrt
 
 class PolygonEssaisSuccessifs(Polygon):
     def __init__(self, n, summits = [], arcs = []):
@@ -59,6 +60,14 @@ class PolygonEssaisSuccessifs(Polygon):
                 return False
             
         return True
+    
+    def distance(self, p1, p2):
+        """
+        Distance euclidienne entre deux points
+        Source : https://fr.wikipedia.org/wiki/Distance_entre_deux_points_sur_le_plan_cart%C3%A9sien
+        """
+
+        return sqrt(((p1[0] - p2[0]) ** 2 + (p1[1]-p2[1]) ** 2))
     
     def divide(self, i, j):
         """
@@ -165,10 +174,14 @@ def triangulation_essais_successifs(polygon, polygonAllArcs, polygonArcsCount = 
 
 
 if __name__ == "__main__":
-    polygon = PolygonEssaisSuccessifs(11)
+    polygon = PolygonEssaisSuccessifs(6)
     polygon.generateSummits(1)
     polygon.show()
     
     polygon.arcs = triangulation_essais_successifs(polygon, polygon.getAllArcs())
     print(polygon.arcs)
+    distanceTotal = 0 
+    for a in polygon.arcs:
+        distanceTotal = distanceTotal + polygon.distance(polygon.summits[a[0]],polygon.summits[a[1]])
+    print("Distance totale de triangulation : ",distanceTotal)
     polygon.show()
