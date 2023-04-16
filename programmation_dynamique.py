@@ -129,7 +129,8 @@ def triangulation_dynamique(polygon):
     
     return polygon.arcs
     
-if __name__ == "__main__":
+
+def main():
     polygon = PolygonProgrammationDynamique(7)
     polygon.generateSummits(1)
     polygon.show()
@@ -143,3 +144,7 @@ if __name__ == "__main__":
         
     print("Distance totale de triangulation : ",distanceTotal)
     polygon.show()
+
+
+if __name__ == "__main__":
+    main()

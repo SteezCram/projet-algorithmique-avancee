@@ -78,7 +78,7 @@ class Polygon:
         plt.show()
 
 
-if __name__ == "__main__":
+def main():
     polygon = Polygon(5)
     polygon.generateSummits(1)
     polygon.arcs = [(0, 2)]
@@ -86,3 +86,7 @@ if __name__ == "__main__":
     print(polygon.summits)
     print(polygon.arcs)
     polygon.show()
+
+
+if __name__ == "__main__":
+    main()

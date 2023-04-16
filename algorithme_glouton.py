@@ -1,7 +1,7 @@
 from math import sqrt
 from polygon import Polygon
 
-class PolygonGlouton(Polygon):
+class PolygonAlgorithmeGlouton(Polygon):
     def distance(self, p1, p2):
         """
         Distance euclidienne entre deux points
@@ -121,8 +121,8 @@ def triangulation_glouton(polygon):
     return polygon.arcs
 
 
-if __name__ == "__main__":
-    polygon = PolygonGlouton(6)
+def main():
+    polygon = PolygonAlgorithmeGlouton(6)
     polygon.generateSummits(1)
     polygon.show()
 
@@ -135,3 +135,7 @@ if __name__ == "__main__":
     
     print("Distance totale de triangulation : ",distanceTotal)
     polygon.show()
+
+
+if __name__ == "__main__":
+    main()
