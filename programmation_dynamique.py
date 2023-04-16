@@ -136,8 +136,10 @@ if __name__ == "__main__":
 
     polygon.arcs = triangulation_dynamique(polygon)
     print(polygon.arcs)
+
     distanceTotal = 0 
     for a in polygon.arcs:
         distanceTotal = distanceTotal + polygon.distance(polygon.summits[a[0]],polygon.summits[a[1]])
+        
     print("Distance totale de triangulation : ",distanceTotal)
     polygon.show()
